@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-royal-950 antialiased;
+}
+
+::selection {
+  @apply bg-brightGold text-royal-950;
+}
