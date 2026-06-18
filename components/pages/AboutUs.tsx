@@ -8,15 +8,15 @@ const leaders = [
     role: "Lead Pastor",
     image:
       "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85",
-    bio: "Pastor John leads with a heart for biblical teaching, discipleship, and community transformation."
+    bio: "Pastor John leads with a heart for biblical teaching, discipleship, and community transformation.",
   },
   {
     name: "First Lady Mary Matthews",
     role: "Women's Ministry Leader",
     image:
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=900&q=85",
-    bio: "First Lady Mary champions women, families, and practical faith through compassionate leadership."
-  }
+    bio: "First Lady Mary champions women, families, and practical faith through compassionate leadership.",
+  },
 ];
 
 export default function AboutUs() {
@@ -41,10 +41,10 @@ export default function AboutUs() {
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
               Embassy Tabernacle Church was founded as a spiritual home for
-              families seeking a deeper walk with Christ, practical teaching,
-              and a community committed to service. From weekly worship to
-              local outreach, our mission is to raise ambassadors who represent
-              the love, wisdom, and hope of Jesus wherever they go.
+              families seeking a deeper walk with Christ, practical teaching and
+              a community committed to service. From weekly worship to local
+              outreach, our mission is to raise ambassadors who represent the
+              love, wisdom, and hope of Jesus wherever they go.
             </p>
             <blockquote className="mt-8 rounded-xl border-l-4 border-embassyGold bg-white p-6 font-serif text-2xl font-bold leading-9 text-royal-950 shadow-sm">
               "Raising Ambassadors rooted in Christ"
@@ -81,7 +81,9 @@ export default function AboutUs() {
                 <p className="mt-1 text-sm font-bold uppercase tracking-[0.14em] text-embassyGold">
                   {leader.role}
                 </p>
-                <p className="mt-4 text-sm leading-6 text-gray-500">{leader.bio}</p>
+                <p className="mt-4 text-sm leading-6 text-gray-500">
+                  {leader.bio}
+                </p>
               </article>
             ))}
           </div>

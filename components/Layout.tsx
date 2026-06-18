@@ -9,7 +9,6 @@ import {
   Menu,
   Music2,
   X,
-  Youtube,
 } from "lucide-react";
 
 const navLinks = [
@@ -21,7 +20,6 @@ const navLinks = [
 
 export const socialLinks = [
   { label: "Facebook", href: "#", Icon: Facebook },
-  { label: "YouTube", href: "#", Icon: Youtube },
   { label: "Instagram", href: "#", Icon: Instagram },
 ];
 
@@ -153,7 +151,7 @@ export default function Layout({ children }: LayoutProps) {
             </p>
             <p className="mt-3 max-w-sm text-sm leading-6 text-white/70">
               A warm, Christ-centered community where families grow in faith,
-              purpose, and service.
+              purpose and service.
             </p>
           </div>
 
@@ -207,7 +205,7 @@ export default function Layout({ children }: LayoutProps) {
         </div>
 
         <div className="border-t border-white/10 px-4 py-6 text-center text-sm text-white/60">
-          <p>2026 Embassy Tabernacle Church. All Rights Reserved.</p>
+          <p>© 2026 Embassy Tabernacle Church. All Rights Reserved.</p>
           <p className="mt-1">
             Developed by{" "}
             <Link
