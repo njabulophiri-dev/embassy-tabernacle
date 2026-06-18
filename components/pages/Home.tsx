@@ -75,14 +75,11 @@ export default function Home() {
                 label: string;
                 href: string;
                 Icon: any;
-              }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="grid h-12 w-12 place-items-center rounded-full border border-royal-950/10 bg-white text-royal-950 shadow-sm transition hover:-translate-y-1 hover:border-embassyGold hover:bg-embassyGold hover:text-white hover:shadow-lg"
-                >
-                  {typeof Icon === "function" ? (
+              }) => {
+                const classes =
+                  "grid h-12 w-12 place-items-center rounded-full border border-royal-950/10 bg-white text-royal-950 shadow-sm transition hover:-translate-y-1 hover:border-embassyGold hover:bg-embassyGold hover:text-white hover:shadow-lg";
+                const content =
+                  typeof Icon === "function" ? (
                     <Icon className="h-5 w-5" />
                   ) : (
                     <svg
@@ -90,9 +87,34 @@ export default function Home() {
                       viewBox="0 0 24 24"
                       dangerouslySetInnerHTML={{ __html: Icon.svg }}
                     />
-                  )}
-                </Link>
-              ),
+                  );
+
+                return href.startsWith("http") ? (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(href, "_blank", "noopener,noreferrer");
+                    }}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <Link
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className={classes}
+                  >
+                    {content}
+                  </Link>
+                );
+              },
             )}
           </div>
         </div>

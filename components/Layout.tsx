@@ -13,9 +13,21 @@ const navLinks = [
 ];
 
 export const socialLinks = [
-  { label: "Facebook", href: "#", Icon: siFacebook },
-  { label: "Instagram", href: "#", Icon: siInstagram },
-  { label: "TikTok", href: "#", Icon: siTiktok },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/share/18fKw2tafN/?mibextid=wwXIfr",
+    Icon: siFacebook,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/embassy.tabernacle",
+    Icon: siInstagram,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@embassy_tabernacle",
+    Icon: siTiktok,
+  },
 ];
 
 type LayoutProps = {
@@ -180,19 +192,42 @@ export default function Layout({ children }: LayoutProps) {
           <div>
             <h2 className="font-serif text-xl font-bold">Connect With Us</h2>
             <div className="mt-5 flex gap-3">
-              {socialLinks.map(({ label, href, Icon }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-1 hover:bg-embassyGold hover:text-royal-950"
-                >
+              {socialLinks.map(({ label, href, Icon }) => {
+                const commonClasses =
+                  "grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-1 hover:bg-embassyGold hover:text-royal-950";
+                const content = (
                   <div
                     dangerouslySetInnerHTML={{ __html: Icon.svg }}
                     className="h-5 w-5"
                   />
-                </Link>
-              ))}
+                );
+
+                return href.startsWith("http") ? (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={commonClasses}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(href, "_blank", "noopener,noreferrer");
+                    }}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <Link
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className={commonClasses}
+                  >
+                    {content}
+                  </Link>
+                );
+              })}
             </div>
             <Link
               href="mailto:info@embassytabernacle.org"
