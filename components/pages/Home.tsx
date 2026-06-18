@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, CalendarDays, Users } from "lucide-react";
+import { Church, CalendarDays, Users } from "lucide-react";
 import Layout, { socialLinks } from "../Layout";
 
 const stats = [
@@ -16,7 +16,7 @@ const stats = [
   {
     label: "Multiple Campuses",
     detail: "One church family across communities",
-    Icon: Building2,
+    Icon: Church,
   },
 ];
 
