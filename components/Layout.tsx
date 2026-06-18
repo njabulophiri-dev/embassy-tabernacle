@@ -1,15 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  Church,
-  Facebook,
-  Instagram,
-  Mail,
-  Menu,
-  Music2,
-  X,
-} from "lucide-react";
+import { siFacebook, siInstagram, siTiktok } from "simple-icons";
+
+import { Mail, Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -19,8 +13,9 @@ const navLinks = [
 ];
 
 export const socialLinks = [
-  { label: "Facebook", href: "#", Icon: Facebook },
-  { label: "Instagram", href: "#", Icon: Instagram },
+  { label: "Facebook", href: "#", Icon: siFacebook },
+  { label: "Instagram", href: "#", Icon: siInstagram },
+  { label: "TikTok", href: "#", Icon: siTiktok },
 ];
 
 type LayoutProps = {
@@ -90,6 +85,7 @@ export default function Layout({ children }: LayoutProps) {
             type="button"
             className="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white transition hover:border-brightGold hover:text-brightGold lg:hidden"
             aria-label="Toggle navigation menu"
+            aria-controls="mobile-navigation"
             aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((open) => !open)}
           >
@@ -102,6 +98,7 @@ export default function Layout({ children }: LayoutProps) {
         </nav>
 
         <div
+          id="mobile-navigation"
           className={`overflow-hidden border-t border-white/10 bg-royal-950 transition-all duration-300 lg:hidden ${
             isMenuOpen ? "max-h-96" : "max-h-0"
           }`}
@@ -190,7 +187,10 @@ export default function Layout({ children }: LayoutProps) {
                   aria-label={label}
                   className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-1 hover:bg-embassyGold hover:text-royal-950"
                 >
-                  <Icon className="h-5 w-5" />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: Icon.svg }}
+                    className="h-5 w-5"
+                  />
                 </Link>
               ))}
             </div>

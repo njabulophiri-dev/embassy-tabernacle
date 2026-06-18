@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { Church, CalendarDays, Users } from "lucide-react";
 import Layout, { socialLinks } from "../Layout";
@@ -65,36 +66,59 @@ export default function Home() {
       <section className="bg-white px-4 py-10 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6">
           <div className="flex flex-wrap justify-center gap-4">
-            {socialLinks.map(({ label, href, Icon }) => (
-              <Link
-                key={label}
-                href={href}
-                aria-label={label}
-                className="grid h-12 w-12 place-items-center rounded-full border border-royal-950/10 bg-white text-royal-950 shadow-sm transition hover:-translate-y-1 hover:border-embassyGold hover:bg-embassyGold hover:text-white hover:shadow-lg"
-              >
-                <Icon className="h-5 w-5" />
-              </Link>
-            ))}
+            {socialLinks.map(
+              ({
+                label,
+                href,
+                Icon,
+              }: {
+                label: string;
+                href: string;
+                Icon: any;
+              }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="grid h-12 w-12 place-items-center rounded-full border border-royal-950/10 bg-white text-royal-950 shadow-sm transition hover:-translate-y-1 hover:border-embassyGold hover:bg-embassyGold hover:text-white hover:shadow-lg"
+                >
+                  {typeof Icon === "function" ? (
+                    <Icon className="h-5 w-5" />
+                  ) : (
+                    <svg
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      dangerouslySetInnerHTML={{ __html: Icon.svg }}
+                    />
+                  )}
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </section>
 
       <section className="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
-          {stats.map(({ label, detail, Icon }) => (
-            <article
-              key={label}
-              className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-2 hover:shadow-glow"
-            >
-              <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-royal-950 text-brightGold">
-                <Icon className="h-7 w-7" />
-              </div>
-              <h2 className="mt-6 font-serif text-3xl font-bold text-royal-950">
-                {label}
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-gray-500">{detail}</p>
-            </article>
-          ))}
+          {stats.map(({ label, detail, Icon }) => {
+            const IconComponent = Icon as unknown as React.ComponentType<
+              React.SVGProps<SVGSVGElement>
+            >;
+            return (
+              <article
+                key={label}
+                className="rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm transition hover:-translate-y-2 hover:shadow-glow"
+              >
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-royal-950 text-brightGold">
+                  <IconComponent className="h-7 w-7" />
+                </div>
+                <h2 className="mt-6 font-serif text-3xl font-bold text-royal-950">
+                  {label}
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-gray-500">{detail}</p>
+              </article>
+            );
+          })}
         </div>
       </section>
     </Layout>

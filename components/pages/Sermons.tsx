@@ -1,6 +1,14 @@
 import Link from "next/link";
-import { Music2, Play, Podcast, YouTube } from "lucide-react";
+import { Play } from "lucide-react";
+import { siYoutube, siApplepodcasts, siSpotify } from "simple-icons";
+import type { ComponentType, SVGProps } from "react";
 import Layout from "../Layout";
+
+type PodcastIcon = ComponentType<SVGProps<SVGSVGElement>> | { svg: string };
+
+function isSvgIcon(icon: PodcastIcon): icon is { svg: string } {
+  return typeof icon === "object" && icon !== null && "svg" in icon;
+}
 
 const sermons = [
   {
@@ -47,18 +55,26 @@ const sermons = [
   },
 ];
 
-const podcastButtons = [
+const podcastButtons: {
+  label: string;
+  Icon: PodcastIcon;
+  className: string;
+}[] = [
   {
     label: "Spotify",
-    Icon: Music2,
+    Icon: siSpotify,
     className: "bg-[#1DB954] hover:bg-[#169c46]",
   },
   {
     label: "Apple Podcasts",
-    Icon: Podcast,
+    Icon: siApplepodcasts,
     className: "bg-zinc-900 hover:bg-zinc-700",
   },
-  { label: "YouTube", Icon: YouTube, className: "bg-red-600 hover:bg-red-700" },
+  {
+    label: "YouTube",
+    Icon: siYoutube,
+    className: "bg-red-600 hover:bg-red-700",
+  },
 ];
 
 export default function Sermons() {
@@ -126,7 +142,15 @@ export default function Sermons() {
                 href="#"
                 className={`inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-bold text-white shadow-lg transition hover:-translate-y-1 ${className}`}
               >
-                <Icon className="h-5 w-5" />
+                {isSvgIcon(Icon) ? (
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    dangerouslySetInnerHTML={{ __html: Icon.svg }}
+                  />
+                ) : (
+                  <Icon className="h-5 w-5" />
+                )}
                 {label}
               </Link>
             ))}
