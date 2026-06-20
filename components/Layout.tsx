@@ -7,8 +7,8 @@ import { Mail, Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/about-us" },
-  { label: "Giving", href: "#" },
+  { label: "About Us", href: "/about" },
+  { label: "Giving", href: "/giving" },
   { label: "Sermons", href: "/sermons" },
 ];
 
@@ -86,7 +86,7 @@ export default function Layout({ children }: LayoutProps) {
 
           <div className="hidden items-center gap-4 lg:flex">
             <Link
-              href="#"
+              href="/contact"
               className="rounded-full bg-embassyGold px-6 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:bg-brightGold hover:text-royal-950"
             >
               Plan Your Visit
@@ -127,7 +127,7 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
             ))}
             <Link
-              href="#"
+              href="/contact"
               onClick={() => setIsMenuOpen(false)}
               className="mt-2 rounded-full bg-embassyGold px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-brightGold hover:text-royal-950"
             >
@@ -167,25 +167,25 @@ export default function Layout({ children }: LayoutProps) {
           <div>
             <h2 className="font-serif text-xl font-bold">Quick Links</h2>
             <div className="mt-4 flex flex-col items-start gap-3">
-              {["Home", "About Us", "Giving", "Sermons", "Contact"].map(
-                (label) => (
-                  <Link
-                    key={label}
-                    href={
-                      label === "Home"
-                        ? "/"
-                        : label === "About Us"
-                          ? "/about-us"
+              {["Home", "About Us", "Giving", "Sermons"].map((label) => (
+                <Link
+                  key={label}
+                  href={
+                    label === "Home"
+                      ? "/"
+                      : label === "About Us"
+                        ? "/about"
+                        : label === "Giving"
+                          ? "/giving"
                           : label === "Sermons"
                             ? "/sermons"
                             : "#"
-                    }
-                    className="text-sm text-white/70 transition hover:text-brightGold"
-                  >
-                    {label}
-                  </Link>
-                ),
-              )}
+                  }
+                  className="text-sm text-white/70 transition hover:text-brightGold"
+                >
+                  {label}
+                </Link>
+              ))}
             </div>
           </div>
 
