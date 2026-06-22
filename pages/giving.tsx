@@ -57,8 +57,7 @@ export default function Giving() {
                 Support the mission with secure online giving.
               </h1>
               <p className="mt-4 text-lg text-white/75 sm:text-xl">
-                One-time gifts, automated monthly tithing, and fast mobile pay
-                via Stripe.
+                One-time gifts, automated monthly tithing and fast mobile pay
               </p>
             </div>
 
@@ -68,7 +67,7 @@ export default function Giving() {
               </p>
               <p className="mt-3 leading-7">
                 Secure checkout with popular payment methods like cards, Apple
-                Pay, Google Pay, and more.
+                Pay, Google Pay and more.
               </p>
             </div>
           </div>
@@ -142,7 +141,7 @@ export default function Giving() {
                 </div>
                 <p className="text-sm text-white/70">
                   You are supporting the church family with a{" "}
-                  {frequency === "monthly" ? "monthly" : "one-time"} gift.
+                  {frequency === "monthly" ? "monthly" : "one-time"} offering.
                 </p>
                 {error ? (
                   <p className="rounded-2xl bg-red-600/10 p-3 text-sm text-red-200">
@@ -166,7 +165,7 @@ export default function Giving() {
                   Scan to pay
                 </p>
                 <p className="text-white/80">
-                  Open the checkout link on your phone, or use the QR code once
+                  Open the checkout link on your phone or use the QR code once
                   the secure session is created.
                 </p>
                 {checkoutUrl ? (
@@ -179,7 +178,7 @@ export default function Giving() {
                       className="mx-auto"
                     />
                     <p className="mt-4 text-sm text-white/70">
-                      Scan this code to complete your gift on mobile.
+                      Scan this code to complete your offering on mobile.
                     </p>
                   </div>
                 ) : (
@@ -198,7 +197,7 @@ export default function Giving() {
                   <li>Credit / debit cards</li>
                   <li>Apple Pay / Google Pay</li>
                   <li>Link and cashier payment methods</li>
-                  <li>Recurring monthly giving</li>
+                  <li>Recurring monthly offering</li>
                 </ul>
               </div>
             </aside>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Church, CalendarDays, Users } from "lucide-react";
 import Layout, { socialLinks } from "../Layout";
 
-const stats = [
+/*const stats = [
   {
     label: "10+ Years",
     detail: "Serving families with faith and purpose",
@@ -19,7 +19,7 @@ const stats = [
     detail: "One church family across communities",
     Icon: Church,
   },
-];
+]; */
 
 export default function Home() {
   return (
@@ -120,7 +120,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
+      {/* <section className="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
           {stats.map(({ label, detail, Icon }) => {
             const IconComponent = Icon as unknown as React.ComponentType<
@@ -138,11 +138,11 @@ export default function Home() {
                   {label}
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-gray-500">{detail}</p>
-              </article>
+              </article >
             );
           })}
         </div>
-      </section>
+      </section > */}
     </Layout>
   );
 }

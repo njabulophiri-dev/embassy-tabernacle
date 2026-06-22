@@ -10,11 +10,11 @@ export default function Contact() {
               Plan Your Visit
             </p>
             <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
-              Let us help you plan your visit.
+              Let us help you.
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-white/75 sm:text-xl">
-              Reach out to book a tour, ask about service times, or get
-              directions to our campus.
+              Reach out to book a tour, ask about service times or get
+              directions to our church.
             </p>
           </div>
 
@@ -43,8 +43,8 @@ export default function Contact() {
                   </a>
                 </p>
                 <p>
-                  <strong>Address:</strong> 123 Church Lane, Your City, Your
-                  State
+                  <strong>Address:</strong> Pitsani Rd, Kelland, Johannesburg,
+                  2194
                 </p>
               </div>
 
@@ -74,21 +74,18 @@ export default function Contact() {
                   <p className="font-semibold text-white">
                     Typical service times
                   </p>
-                  <p>Sunday • 9:00 AM & 11:00 AM</p>
+                  <p>Sunday • 9:00 AM - 12:00 AM</p>
                 </div>
                 <div>
                   <p className="font-semibold text-white">What to expect</p>
                   <p>
-                    Warm welcome, family-friendly worship, children’s ministry,
+                    Warm welcome, family-friendly worship, children’s ministry
                     and a message rooted in Scripture.
                   </p>
                 </div>
                 <div>
                   <p className="font-semibold text-white">Parking</p>
-                  <p>
-                    Free guest parking is available on-site with clear signage
-                    when you arrive.
-                  </p>
+                  <p>Available on-site with clear signage when you arrive.</p>
                 </div>
               </div>
             </section>
