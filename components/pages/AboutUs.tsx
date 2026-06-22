@@ -102,7 +102,7 @@ export default function AboutUs() {
               </h2>
               <p className="mt-5 flex items-start gap-3 text-lg leading-8 text-gray-600">
                 <MapPin className="mt-1 h-6 w-6 shrink-0 text-embassyGold" />1
-                Pitsani Rd, Kelland(Northcliff), Johannesburg, 2194
+                Pitsani Rd, Kelland, Johannesburg, 2194
               </p>
               <Link
                 href="https://maps.app.goo.gl/qPY6ZdyW3zeoN4FE7"
