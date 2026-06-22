@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Play } from "lucide-react";
 import { siYoutube, siApplepodcasts, siSpotify } from "simple-icons";
 import type { ComponentType, SVGProps } from "react";
+import { useState } from "react";
 import Layout from "../Layout";
 
 type PodcastIcon = ComponentType<SVGProps<SVGSVGElement>> | { svg: string };
@@ -15,43 +16,55 @@ const sermons = [
     title: "Walking Through Hard Times",
     preacher: "Pastor John",
     date: "March 16, 2026",
-    image:
-      "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1200&q=85",
+    videoId: "dQw4w9WgXcQ",
   },
   {
     title: "Hope in Darkness",
     preacher: "Pastor Sarah",
     date: "March 9, 2026",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85",
+    videoId: "9bZkp7q19f0",
   },
   {
     title: "The Power of Small Things",
     preacher: "Pastor John",
     date: "March 2, 2026",
-    image:
-      "https://images.unsplash.com/photo-1522441815192-d9f04eb0615c?auto=format&fit=crop&w=1200&q=85",
+    videoId: "jNQXAC9IVRw",
   },
   {
     title: "Forgiveness",
     preacher: "Pastor Mike",
     date: "February 23, 2026",
-    image:
-      "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=85",
+    videoId: "dQw4w9WgXcQ",
   },
   {
     title: "Faith That Moves Mountains",
     preacher: "Pastor John",
     date: "February 16, 2026",
-    image:
-      "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=85",
+    videoId: "9bZkp7q19f0",
   },
   {
     title: "Love Your Neighbor",
     preacher: "First Lady Mary",
     date: "February 9, 2026",
-    image:
-      "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=85",
+    videoId: "jNQXAC9IVRw",
+  },
+  {
+    title: "The Grace of God",
+    preacher: "Pastor John",
+    date: "February 2, 2026",
+    videoId: "dQw4w9WgXcQ",
+  },
+  {
+    title: "Living in Purpose",
+    preacher: "Pastor Sarah",
+    date: "January 26, 2026",
+    videoId: "9bZkp7q19f0",
+  },
+  {
+    title: "Strength in Weakness",
+    preacher: "Pastor Mike",
+    date: "January 19, 2026",
+    videoId: "jNQXAC9IVRw",
   },
 ];
 
@@ -68,7 +81,7 @@ const podcastButtons: {
   {
     label: "Apple Podcasts",
     Icon: siApplepodcasts,
-    className: "bg-zinc-900 hover:bg-zinc-700",
+    className: "bg-zinc-700 hover:bg-zinc-500",
   },
   {
     label: "YouTube",
@@ -77,7 +90,15 @@ const podcastButtons: {
   },
 ];
 
+function getYouTubeThumbnail(videoId: string): string {
+  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+}
+
 export default function Sermons() {
+  const [displayCount, setDisplayCount] = useState(6);
+  const displayedSermons = sermons.slice(0, displayCount);
+  const hasMore = displayCount < sermons.length;
+
   return (
     <Layout>
       <section className="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
@@ -96,9 +117,9 @@ export default function Sermons() {
           </div>
 
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {sermons.map((sermon) => (
+            {displayedSermons.map((sermon) => (
               <article
-                key={sermon.title}
+                key={`${sermon.title}-${sermon.date}`}
                 className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-2 hover:scale-[1.01] hover:shadow-glow"
               >
                 <Link
@@ -106,7 +127,7 @@ export default function Sermons() {
                   className="group relative block aspect-video overflow-hidden"
                 >
                   <img
-                    src={sermon.image}
+                    src={getYouTubeThumbnail(sermon.videoId)}
                     alt={`${sermon.title} sermon thumbnail`}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
@@ -127,6 +148,17 @@ export default function Sermons() {
               </article>
             ))}
           </div>
+
+          {hasMore && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => setDisplayCount(displayCount + 6)}
+                className="rounded-full bg-embassyGold px-8 py-4 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:bg-brightGold hover:text-royal-950"
+              >
+                Add More
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

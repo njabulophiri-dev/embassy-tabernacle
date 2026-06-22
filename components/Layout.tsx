@@ -7,15 +7,27 @@ import { Mail, Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/about-us" },
-  { label: "Giving", href: "#" },
+  { label: "About Us", href: "/about" },
+  { label: "Giving", href: "/giving" },
   { label: "Sermons", href: "/sermons" },
 ];
 
 export const socialLinks = [
-  { label: "Facebook", href: "#", Icon: siFacebook },
-  { label: "Instagram", href: "#", Icon: siInstagram },
-  { label: "TikTok", href: "#", Icon: siTiktok },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/share/18fKw2tafN/?mibextid=wwXIfr",
+    Icon: siFacebook,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/embassy.tabernacle",
+    Icon: siInstagram,
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@embassy_tabernacle",
+    Icon: siTiktok,
+  },
 ];
 
 type LayoutProps = {
@@ -74,7 +86,7 @@ export default function Layout({ children }: LayoutProps) {
 
           <div className="hidden items-center gap-4 lg:flex">
             <Link
-              href="#"
+              href="/contact"
               className="rounded-full bg-embassyGold px-6 py-3 text-sm font-bold text-white shadow-lg shadow-black/20 transition hover:bg-brightGold hover:text-royal-950"
             >
               Plan Your Visit
@@ -115,7 +127,7 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
             ))}
             <Link
-              href="#"
+              href="/contact"
               onClick={() => setIsMenuOpen(false)}
               className="mt-2 rounded-full bg-embassyGold px-5 py-3 text-center text-sm font-bold text-white transition hover:bg-brightGold hover:text-royal-950"
             >
@@ -155,44 +167,67 @@ export default function Layout({ children }: LayoutProps) {
           <div>
             <h2 className="font-serif text-xl font-bold">Quick Links</h2>
             <div className="mt-4 flex flex-col items-start gap-3">
-              {["Home", "About Us", "Giving", "Sermons", "Contact"].map(
-                (label) => (
-                  <Link
-                    key={label}
-                    href={
-                      label === "Home"
-                        ? "/"
-                        : label === "About Us"
-                          ? "/about-us"
+              {["Home", "About Us", "Giving", "Sermons"].map((label) => (
+                <Link
+                  key={label}
+                  href={
+                    label === "Home"
+                      ? "/"
+                      : label === "About Us"
+                        ? "/about"
+                        : label === "Giving"
+                          ? "/giving"
                           : label === "Sermons"
                             ? "/sermons"
                             : "#"
-                    }
-                    className="text-sm text-white/70 transition hover:text-brightGold"
-                  >
-                    {label}
-                  </Link>
-                ),
-              )}
+                  }
+                  className="text-sm text-white/70 transition hover:text-brightGold"
+                >
+                  {label}
+                </Link>
+              ))}
             </div>
           </div>
 
           <div>
             <h2 className="font-serif text-xl font-bold">Connect With Us</h2>
             <div className="mt-5 flex gap-3">
-              {socialLinks.map(({ label, href, Icon }) => (
-                <Link
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-1 hover:bg-embassyGold hover:text-royal-950"
-                >
+              {socialLinks.map(({ label, href, Icon }) => {
+                const commonClasses =
+                  "grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-1 hover:bg-embassyGold hover:text-royal-950";
+                const content = (
                   <div
                     dangerouslySetInnerHTML={{ __html: Icon.svg }}
                     className="h-5 w-5"
                   />
-                </Link>
-              ))}
+                );
+
+                return href.startsWith("http") ? (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={commonClasses}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(href, "_blank", "noopener,noreferrer");
+                    }}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <Link
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    className={commonClasses}
+                  >
+                    {content}
+                  </Link>
+                );
+              })}
             </div>
             <Link
               href="mailto:info@embassytabernacle.org"

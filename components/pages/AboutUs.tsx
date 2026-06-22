@@ -101,11 +101,11 @@ export default function AboutUs() {
                 Find Us
               </h2>
               <p className="mt-5 flex items-start gap-3 text-lg leading-8 text-gray-600">
-                <MapPin className="mt-1 h-6 w-6 shrink-0 text-embassyGold" />
-                123 Faith Avenue, Charlotte, NC 28201
+                <MapPin className="mt-1 h-6 w-6 shrink-0 text-embassyGold" />1
+                Pitsani Rd, Kelland(Northcliff), Johannesburg, 2194
               </p>
               <Link
-                href="https://www.google.com/maps"
+                href="https://maps.app.goo.gl/qPY6ZdyW3zeoN4FE7"
                 className="mt-8 inline-flex items-center gap-2 rounded-full bg-royal-950 px-7 py-4 text-sm font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-embassyGold"
               >
                 Get Directions
@@ -115,7 +115,7 @@ export default function AboutUs() {
             <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-glow">
               <iframe
                 title="Embassy Tabernacle Church map"
-                src="https://www.google.com/maps?q=123%20Faith%20Avenue%2C%20Charlotte%2C%20NC%2028201&output=embed"
+                src="https://www.google.com/maps?q=1%20Pitsani%20Rd,%20Kelland(Northcliff),%20Johannesburg,%202194&output=embed"
                 className="h-[360px] w-full"
                 loading="lazy"
               />

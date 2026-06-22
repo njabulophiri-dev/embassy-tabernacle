@@ -1,3 +1,14 @@
-import AboutUs from "../components/pages/AboutUs";
+import { GetServerSideProps } from "next";
 
-export default AboutUs;
+export default function AboutUsRedirect() {
+  return null;
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    redirect: {
+      destination: "/about",
+      permanent: true,
+    },
+  };
+};
