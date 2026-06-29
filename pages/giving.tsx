@@ -7,6 +7,8 @@ const frequencyOptions = [
   { label: "Monthly", value: "monthly" },
 ];
 
+const formatCurrency = (value: number) => `R${value.toLocaleString("en-ZA")}`;
+
 export default function Giving() {
   const router = useRouter();
   const success = router.query.success === "true";
@@ -89,12 +91,12 @@ export default function Giving() {
                             : "border-white/10 bg-white/5 text-white/80 hover:border-brightGold hover:bg-white/10"
                         }`}
                       >
-                        ${value}
+                        {formatCurrency(value)}
                       </button>
                     ))}
                   </div>
                   <label className="block text-sm font-semibold text-white/80">
-                    Custom amount
+                    Custom amount (R)
                     <input
                       type="number"
                       min={1}
@@ -137,7 +139,9 @@ export default function Giving() {
                   <p className="text-base font-semibold text-white/80">
                     Selected gift
                   </p>
-                  <p className="text-2xl font-bold text-white">${amount}</p>
+                  <p className="text-2xl font-bold text-white">
+                    {formatCurrency(amount)}
+                  </p>
                 </div>
                 <p className="text-sm text-white/70">
                   You are supporting the church family with a{" "}
