@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { siFacebook, siInstagram, siTiktok } from "simple-icons";
 
-import { Mail, Menu, X } from "lucide-react";
+import { Mail, Menu, Phone, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -37,6 +37,15 @@ type LayoutProps = {
 export default function Layout({ children }: LayoutProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const contactEmail = "embassy.tabernacle@gmail.com";
+  const contactEmailHref = `mailto:${contactEmail}?subject=Hello%20Embassy%20Tabernacle`;
+
+  const handleEmailClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    window.location.href = contactEmailHref;
+    window.open(contactEmailHref, "_blank", "noopener,noreferrer");
+  };
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 24);
@@ -159,8 +168,9 @@ export default function Layout({ children }: LayoutProps) {
               Raising Ambassadors rooted in Christ
             </p>
             <p className="mt-3 max-w-sm text-sm leading-6 text-white/70">
-              A warm, Christ-centered community where families grow in faith,
-              purpose and service.
+              We are a Bible-anchored, Christ-centered and
+              <br />
+              Spirit-led Church
             </p>
           </div>
 
@@ -229,13 +239,24 @@ export default function Layout({ children }: LayoutProps) {
                 );
               })}
             </div>
-            <Link
-              href="mailto:info@embassytabernacle.org"
+            <a
+              href={contactEmailHref}
+              onClick={handleEmailClick}
               className="mt-5 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-brightGold"
             >
               <Mail className="h-4 w-4" />
-              info@embassytabernacle.org
-            </Link>
+              {contactEmail}
+            </a>
+            <a
+              href="tel:+27606026095"
+              onClick={() => {
+                window.location.href = "tel:+27606026095";
+              }}
+              className="mt-2 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-brightGold"
+            >
+              <Phone className="h-4 w-4" />
+              +27 (60) 602 6095
+            </a>
           </div>
         </div>
 
