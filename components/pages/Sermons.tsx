@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { Play } from "lucide-react";
 import { siYoutube, siApplepodcasts, siSpotify } from "simple-icons";
 import type { ComponentType, SVGProps } from "react";
 import { useState } from "react";
+import Link from "next/link";
 import Layout from "../Layout";
 
 type PodcastIcon = ComponentType<SVGProps<SVGSVGElement>> | { svg: string };
@@ -13,58 +13,46 @@ function isSvgIcon(icon: PodcastIcon): icon is { svg: string } {
 
 const sermons = [
   {
-    title: "Walking Through Hard Times",
-    preacher: "Pastor John",
-    date: "March 16, 2026",
-    videoId: "dQw4w9WgXcQ",
+    title: "Protocol of David Pt.2",
+    preacher: "Pastor Bonginkosi Ndlela",
+    date: "June 22, 2026",
+    videoId: "8CzRqAsnIRk",
   },
   {
-    title: "Hope in Darkness",
-    preacher: "Pastor Sarah",
-    date: "March 9, 2026",
-    videoId: "9bZkp7q19f0",
+    title: "The Davidic Protocol Part 1",
+    preacher: "Pastor Bonginkosi Ndlela",
+    date: "June 16, 2026",
+    videoId: "0fTwKyjDFgU",
   },
   {
-    title: "The Power of Small Things",
-    preacher: "Pastor John",
-    date: "March 2, 2026",
-    videoId: "jNQXAC9IVRw",
+    title: "Introduction to ‘Being Whole’",
+    preacher: "Pastor Bonginkosi Ndlela",
+    date: "June 15, 2026",
+    videoId: "C8lFba3m67Y",
   },
   {
-    title: "Forgiveness",
-    preacher: "Pastor Mike",
-    date: "February 23, 2026",
-    videoId: "dQw4w9WgXcQ",
+    title: "Jesus Anointed with The Holy Spirit and Power",
+    preacher: "Pastor Bonginkosi Ndlela",
+    date: "June 11, 2026",
+    videoId: "2yOKwRZQSRQ",
   },
   {
-    title: "Faith That Moves Mountains",
-    preacher: "Pastor John",
-    date: "February 16, 2026",
-    videoId: "9bZkp7q19f0",
+    title: "Validity and Infallibility of Christ’s Resurrection",
+    preacher: "Pastor Bonginkosi Ndlela",
+    date: "May 13, 2026",
+    videoId: "Sv5KfPHddms",
   },
   {
-    title: "Love Your Neighbor",
-    preacher: "First Lady Mary",
-    date: "February 9, 2026",
-    videoId: "jNQXAC9IVRw",
+    title: "Embassy Tabernacle First Sunday",
+    preacher: "Apostle Kabelo Moroke",
+    date: "Apr 11, 2026",
+    videoId: "qvSVL0FuXWo",
   },
   {
-    title: "The Grace of God",
-    preacher: "Pastor John",
-    date: "February 2, 2026",
-    videoId: "dQw4w9WgXcQ",
-  },
-  {
-    title: "Living in Purpose",
-    preacher: "Pastor Sarah",
-    date: "January 26, 2026",
-    videoId: "9bZkp7q19f0",
-  },
-  {
-    title: "Strength in Weakness",
-    preacher: "Pastor Mike",
-    date: "January 19, 2026",
-    videoId: "jNQXAC9IVRw",
+    title: "The Chronicles of Peter's Walk with Christ || CLT (PTA)",
+    preacher: "Pastor Bonginkosi Ndlela",
+    date: "Apr 11, 2026",
+    videoId: "9QLqu_Ct3RM",
   },
 ];
 
@@ -111,7 +99,7 @@ export default function Sermons() {
               Recent Sermons
             </h1>
             <p className="mt-5 text-lg leading-8 text-gray-600">
-              Catch the latest messages from Embassy Tabernacle Church and stay
+              Catch the latest messages from Embassy Tabernacle and stay
               encouraged throughout the week.
             </p>
           </div>
@@ -122,8 +110,10 @@ export default function Sermons() {
                 key={`${sermon.title}-${sermon.date}`}
                 className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-2 hover:scale-[1.01] hover:shadow-glow"
               >
-                <Link
-                  href="#"
+                <a
+                  href={`https://www.youtube.com/watch?v=${sermon.videoId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group relative block aspect-video overflow-hidden"
                 >
                   <img
@@ -135,7 +125,7 @@ export default function Sermons() {
                   <span className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition group-hover:scale-110 group-hover:bg-embassyGold group-hover:text-royal-950">
                     <Play className="ml-1 h-7 w-7 fill-current" />
                   </span>
-                </Link>
+                </a>
                 <div className="p-6">
                   <h2 className="font-serif text-2xl font-bold leading-8 text-royal-950">
                     {sermon.title}

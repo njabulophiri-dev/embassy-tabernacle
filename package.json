@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "rm -rf .next/cache/webpack && next dev",
+    "clean:next": "rm -rf .next/cache/webpack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
