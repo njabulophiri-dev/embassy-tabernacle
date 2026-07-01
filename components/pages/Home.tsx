@@ -63,7 +63,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-10 sm:px-6">
+      {/*<section className="bg-white px-4 py-10 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6">
           <div className="flex flex-wrap justify-center gap-4">
             {socialLinks.map(
@@ -118,7 +118,7 @@ export default function Home() {
             )}
           </div>
         </div>
-      </section>
+      </section>*/}
 
       {/* <section className="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
