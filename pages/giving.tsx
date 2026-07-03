@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const presetAmounts = [25, 50, 100, 250, 500];
 const frequencyOptions = [
-  { label: "One-time", value: "one_time" },
-  { label: "Monthly", value: "monthly" },
+  { label: "One-time", value: "one_time", disabled: false },
+  { label: "Monthly (coming soon)", value: "monthly", disabled: true },
 ];
 
 const formatCurrency = (value: number) => `R${value.toLocaleString("en-ZA")}`;
@@ -14,21 +14,73 @@ export default function Giving() {
   const success = router.query.success === "true";
   const canceled = router.query.canceled === "true";
 
+  const [email, setEmail] = useState("");
   const [amount, setAmount] = useState(100);
   const [frequency, setFrequency] = useState("one_time");
   const [isLoading, setIsLoading] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+
+  const reference =
+    typeof router.query.reference === "string" ? router.query.reference : null;
+
+  useEffect(() => {
+    if (success && reference) {
+      verifyPayment(reference);
+    } else if (success) {
+      setPaymentStatus(
+        "Payment was completed. If this page does not update, refresh it once Paystack redirects back.",
+      );
+    } else if (canceled) {
+      setPaymentStatus(
+        "Payment was canceled. Please try again if you want to complete your gift.",
+      );
+    }
+  }, [success, canceled, reference]);
+
+  const verifyPayment = async (reference: string) => {
+    setIsVerifying(true);
+    setError(null);
+    setPaymentStatus("Verifying your payment with Paystack...");
+
+    try {
+      const response = await fetch(
+        `/api/verify-payment?reference=${encodeURIComponent(reference)}`,
+      );
+      const body = await response.json();
+
+      if (!response.ok || !body.verified) {
+        throw new Error(body.error || "Unable to verify payment.");
+      }
+
+      setPaymentStatus(
+        "Payment verified successfully. Thank you for your gift!",
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unexpected error.");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   const createSession = async () => {
     setIsLoading(true);
     setError(null);
+    setPaymentStatus(null);
+
+    if (!email.includes("@")) {
+      setError("Please enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, frequency }),
+        body: JSON.stringify({ email, amount, frequency }),
       });
 
       const body = await response.json();
@@ -65,7 +117,7 @@ export default function Giving() {
 
             <div className="mt-6 rounded-3xl bg-white/5 p-6 text-white/80 sm:mt-0">
               <p className="text-sm uppercase tracking-[0.25em] text-brightGold">
-                Stripe powered
+                Paystack powered
               </p>
               <p className="mt-3 leading-7">
                 Secure checkout with popular payment methods like cards, Apple
@@ -96,6 +148,16 @@ export default function Giving() {
                     ))}
                   </div>
                   <label className="block text-sm font-semibold text-white/80">
+                    Email address
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      className="mt-3 w-full rounded-2xl border border-white/10 bg-royal-950/80 px-4 py-3 text-white outline-none transition focus:border-brightGold"
+                      placeholder="you@example.com"
+                    />
+                  </label>
+                  <label className="block text-sm font-semibold text-white/80">
                     Custom amount (R)
                     <input
                       type="number"
@@ -120,12 +182,15 @@ export default function Giving() {
                       <button
                         key={option.value}
                         type="button"
-                        onClick={() => setFrequency(option.value)}
+                        onClick={() =>
+                          !option.disabled && setFrequency(option.value)
+                        }
+                        disabled={option.disabled}
                         className={`rounded-2xl border px-4 py-3 text-left transition ${
                           frequency === option.value
                             ? "border-brightGold bg-brightGold/10 text-white"
                             : "border-white/10 bg-white/5 text-white/80 hover:border-brightGold hover:bg-white/10"
-                        }`}
+                        } ${option.disabled ? "cursor-not-allowed opacity-50" : ""}`}
                       >
                         {option.label}
                       </button>
