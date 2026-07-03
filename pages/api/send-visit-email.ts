@@ -17,8 +17,12 @@ export default async function handler(
     message?: string;
   };
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: "Please complete all fields." });
+  const missing = ["name", "email", "message"].filter(
+    (field) => !req.body[field]?.toString().trim(),
+  );
+
+  if (missing.length) {
+    return res.status(400).json({ error: `Missing: ${missing.join(", ")}` });
   }
 
   try {
