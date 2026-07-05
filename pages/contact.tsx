@@ -1,6 +1,45 @@
-import Link from "next/link";
+import { useState } from "react";
 
 export default function Contact() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [feedback, setFeedback] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus("loading");
+    setFeedback("");
+
+    try {
+      const response = await fetch("/api/send-visit-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      const body = await response.json();
+
+      if (!response.ok) {
+        throw new Error(body.error || "Unable to send your message.");
+      }
+
+      setStatus("success");
+      setFeedback("Thanks! Your visit request has been sent.");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      setStatus("error");
+      setFeedback(
+        error instanceof Error ? error.message : "Unable to send your message.",
+      );
+    }
+  };
+
   return (
     <main className="min-h-screen bg-white px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
@@ -27,19 +66,19 @@ export default function Contact() {
                 <p>
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:info@embassytabernacle.org"
+                    href="mailto:njabulophiri55@gmail.com"
                     className="text-brightGold transition hover:text-white"
                   >
-                    info@embassytabernacle.org
+                    embassy.tabernacle@gmail.com
                   </a>
                 </p>
                 <p>
                   <strong>Phone:</strong>{" "}
                   <a
-                    href="tel:+1234567890"
+                    href="tel:+27606026095"
                     className="text-brightGold transition hover:text-white"
                   >
-                    +1 (234) 567-890
+                    +27 (60) 602 6095
                   </a>
                 </p>
                 <p>
@@ -48,7 +87,10 @@ export default function Contact() {
                 </p>
               </div>
 
-              <div className="space-y-4 rounded-3xl bg-white/10 p-6">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 rounded-3xl bg-white/10 p-6"
+              >
                 <p className="text-sm uppercase tracking-[0.25em] text-brightGold">
                   Need help with service times?
                 </p>
@@ -56,13 +98,49 @@ export default function Contact() {
                   If you'd like help choosing the best service or tour time,
                   send us a message and we'll follow up right away.
                 </p>
-                <Link
-                  href="mailto:info@embassytabernacle.org?subject=Plan%20My%20Visit"
-                  className="inline-flex rounded-full bg-brightGold px-6 py-3 text-sm font-semibold text-royal-950 transition hover:bg-white"
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Your name"
+                    className="w-full rounded-2xl border border-white/10 bg-royal-950/80 px-4 py-3 text-white outline-none transition focus:border-brightGold"
+                    required
+                  />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="Your email"
+                    className="w-full rounded-2xl border border-white/10 bg-royal-950/80 px-4 py-3 text-white outline-none transition focus:border-brightGold"
+                    required
+                  />
+                  <textarea
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
+                    placeholder="Tell us what you'd like help with"
+                    rows={4}
+                    className="w-full rounded-2xl border border-white/10 bg-royal-950/80 px-4 py-3 text-white outline-none transition focus:border-brightGold"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="inline-flex rounded-full bg-brightGold px-6 py-3 text-sm font-semibold text-royal-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Email Us to Schedule
-                </Link>
-              </div>
+                  {status === "loading" ? "Sending..." : "Email Us to Schedule"}
+                </button>
+                {feedback ? (
+                  <p
+                    className={`text-sm ${
+                      status === "success" ? "text-emerald-300" : "text-red-300"
+                    }`}
+                  >
+                    {feedback}
+                  </p>
+                ) : null}
+              </form>
             </section>
 
             <section className="space-y-6 rounded-3xl bg-white/5 p-8">

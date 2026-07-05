@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "rm -rf .next/cache/webpack && next dev",
+    "clean:next": "rm -rf .next/cache/webpack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,6 +15,7 @@
     "next": "^14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "resend": "^6.16.0",
     "simple-icons": "^16.23.0",
     "stripe": "^12.13.0"
   },
