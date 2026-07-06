@@ -11,7 +11,7 @@ const formatCurrency = (value: number) => `R${value.toLocaleString("en-ZA")}`;
 
 export default function Giving() {
   const router = useRouter();
-  const [amount, setAmount] = useState(100);
+  const [amount, setAmount] = useState<number | null>(null);
   const [frequency, setFrequency] = useState("one_time");
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
@@ -31,7 +31,15 @@ export default function Giving() {
     }
   }, [router.query.success, router.query.canceled]);
 
-  const createSession = async () => {
+  const createSession = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -39,7 +47,7 @@ export default function Giving() {
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, frequency }),
+        body: JSON.stringify({ amount: amount!, frequency }),
       });
 
       const body = await response.json();
@@ -85,7 +93,10 @@ export default function Giving() {
             </div>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+          <form
+            onSubmit={createSession}
+            className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]"
+          >
             <section className="space-y-8 rounded-3xl bg-white/5 p-8">
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="space-y-4 rounded-3xl bg-white/10 p-6">
@@ -111,9 +122,14 @@ export default function Giving() {
                     <input
                       type="number"
                       min={1}
-                      value={amount}
+                      required
+                      value={amount ?? ""}
                       onChange={(event) =>
-                        setAmount(Number(event.target.value))
+                        setAmount(
+                          event.target.value === ""
+                            ? null
+                            : Number(event.target.value),
+                        )
                       }
                       className="mt-3 w-full rounded-2xl border border-white/10 bg-royal-950/80 px-4 py-3 text-white outline-none transition focus:border-brightGold"
                     />
@@ -151,7 +167,7 @@ export default function Giving() {
                     Selected gift
                   </p>
                   <p className="text-2xl font-bold text-white">
-                    {formatCurrency(amount)}
+                    {amount === null ? "R0" : formatCurrency(amount)}
                   </p>
                 </div>
                 <p className="text-sm text-white/70">
@@ -164,8 +180,7 @@ export default function Giving() {
                   </p>
                 ) : null}
                 <button
-                  type="button"
-                  onClick={createSession}
+                  type="submit"
                   disabled={isLoading}
                   className="inline-flex w-full justify-center rounded-2xl bg-brightGold px-6 py-4 text-sm font-semibold text-royal-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                 >
@@ -216,7 +231,7 @@ export default function Giving() {
                 </ul>
               </div>
             </aside>
-          </div>
+          </form>
         </div>
       </div>
     </main>
