@@ -19,6 +19,7 @@ export default function Giving() {
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string>("");
 
   const createSession = async () => {
     setIsLoading(true);
