@@ -18,8 +18,9 @@ export default async function handler(
   }
 
   const body = req.body as VisitEmailRequestBody;
+  const requiredFields = ["name", "email", "message"] as const;
 
-  const missing = ["name", "email", "message"].filter(
+  const missing = requiredFields.filter(
     (field) => !body[field]?.toString().trim(),
   );
 
