@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const presetAmounts = [25, 50, 100, 250, 500];
@@ -11,15 +11,25 @@ const formatCurrency = (value: number) => `R${value.toLocaleString("en-ZA")}`;
 
 export default function Giving() {
   const router = useRouter();
-  const success = router.query.success === "true";
-  const canceled = router.query.canceled === "true";
-
   const [amount, setAmount] = useState(100);
   const [frequency, setFrequency] = useState("one_time");
   const [isLoading, setIsLoading] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [paymentStatus, setPaymentStatus] = useState<string>("");
+  const [paymentStatus, setPaymentStatus] = useState<
+    "success" | "canceled" | "pending" | ""
+  >("");
+
+  useEffect(() => {
+    const success = router.query.success === "true";
+    const canceled = router.query.canceled === "true";
+
+    if (success) {
+      setPaymentStatus("success");
+    } else if (canceled) {
+      setPaymentStatus("canceled");
+    }
+  }, [router.query.success, router.query.canceled]);
 
   const createSession = async () => {
     setIsLoading(true);
