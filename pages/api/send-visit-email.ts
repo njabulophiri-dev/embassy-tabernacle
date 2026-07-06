@@ -1,6 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 
+type VisitEmailRequestBody = {
+  name?: string;
+  email?: string;
+  message?: string;
+};
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(
@@ -11,19 +17,17 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, message } = req.body as {
-    name?: string;
-    email?: string;
-    message?: string;
-  };
+  const body = req.body as VisitEmailRequestBody;
 
   const missing = ["name", "email", "message"].filter(
-    (field) => !req.body[field]?.toString().trim(),
+    (field) => !body[field]?.toString().trim(),
   );
 
   if (missing.length) {
     return res.status(400).json({ error: `Missing: ${missing.join(", ")}` });
   }
+
+  const { name, email, message } = body as Required<VisitEmailRequestBody>;
 
   try {
     const data = await resend.emails.send({
