@@ -9,6 +9,15 @@ type VisitEmailRequestBody = {
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -29,6 +38,9 @@ export default async function handler(
   }
 
   const { name, email, message } = body as Required<VisitEmailRequestBody>;
+  const escapedName = escapeHtml(name);
+  const escapedEmail = escapeHtml(email);
+  const escapedMessage = escapeHtml(message).replace(/\n/g, "<br />");
 
   try {
     const data = await resend.emails.send({
@@ -37,10 +49,10 @@ export default async function handler(
       subject: "New Plan Your Visit Request",
       html: `
         <h2>New visit request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Name:</strong> ${escapedName}</p>
+        <p><strong>Email:</strong> ${escapedEmail}</p>
         <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br />")}</p>
+        <p>${escapedMessage}</p>
       `,
     });
 
