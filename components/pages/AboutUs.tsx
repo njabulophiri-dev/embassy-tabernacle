@@ -6,16 +6,14 @@ const leaders = [
   {
     name: "Pastor Bonginkosi Ndlela",
     role: "Lead Pastor",
-    image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85",
-    bio: "Pastor John leads with a heart for biblical teaching, discipleship, and community transformation.",
+    image: "#",
+    bio: "Pastor Bonginkosi leads with a heart for biblical teaching, discipleship, and community transformation.",
   },
   {
     name: "First Lady Nompumelelo Ndlela",
     role: "Women's Ministry Leader",
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=900&q=85",
-    bio: "First Lady Mary champions women, families, and practical faith through compassionate leadership.",
+    image: "#",
+    bio: "First Lady Nompumelelo champions women, families, and practical faith through compassionate leadership.",
   },
 ];
 
