@@ -10,6 +10,22 @@ const pricingMetadata = {
   description: "Support Embassy Tabernacle with a secure online gift.",
 };
 
+type CheckoutSessionRequestBody = {
+  amount?: number;
+  frequency?: "one_time" | "monthly";
+};
+
+type CheckoutSessionRequestBodyRequired = Required<CheckoutSessionRequestBody>;
+
+function hasValidCheckoutSessionBody(
+  body: CheckoutSessionRequestBody,
+): body is CheckoutSessionRequestBodyRequired {
+  return (
+    typeof body.amount === "number" && body.amount >= 1 &&
+    (body.frequency === "one_time" || body.frequency === "monthly")
+  );
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -18,18 +34,13 @@ export default async function handler(
     return res.setHeader("Allow", "POST").status(405).end("Method Not Allowed");
   }
 
-  const { amount, frequency } = req.body as {
-    amount?: number;
-    frequency?: "one_time" | "monthly";
-  };
+  const body = req.body as CheckoutSessionRequestBody;
 
-  if (!amount || amount < 1) {
-    return res.status(400).json({ error: "Please provide a valid amount." });
+  if (!hasValidCheckoutSessionBody(body)) {
+    return res.status(400).json({ error: "Please provide a valid amount and frequency." });
   }
 
-  if (!frequency || !["one_time", "monthly"].includes(frequency)) {
-    return res.status(400).json({ error: "Please provide a valid frequency." });
-  }
+  const { amount, frequency } = body;
 
   const origin =
     req.headers.origin ||

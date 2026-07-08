@@ -1,7 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 
+type VisitEmailRequestBody = {
+  name?: string;
+  email?: string;
+  message?: string;
+};
+
+type VisitEmailRequestBodyRequired = Required<VisitEmailRequestBody>;
+
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+function hasRequiredFields(
+  body: VisitEmailRequestBody,
+): body is VisitEmailRequestBodyRequired {
+  return (
+    typeof body.name === "string" &&
+    body.name.trim() !== "" &&
+    typeof body.email === "string" &&
+    body.email.trim() !== "" &&
+    typeof body.message === "string" &&
+    body.message.trim() !== ""
+  );
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,19 +32,18 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, message } = req.body as {
-    name?: string;
-    email?: string;
-    message?: string;
-  };
+  const body = req.body as VisitEmailRequestBody;
+  const requiredFields = ["name", "email", "message"] as const;
 
-  const missing = ["name", "email", "message"].filter(
-    (field) => !req.body[field]?.toString().trim(),
+  const missing = requiredFields.filter(
+    (field) => !body[field]?.toString().trim(),
   );
 
-  if (missing.length) {
+  if (missing.length || !hasRequiredFields(body)) {
     return res.status(400).json({ error: `Missing: ${missing.join(", ")}` });
   }
+
+  const { name, email, message } = body;
 
   try {
     const data = await resend.emails.send({
