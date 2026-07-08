@@ -47,7 +47,7 @@ export default function Home() {
             </p>
             <div className="mt-9 flex flex-col gap-4 sm:flex-row">
               <Link
-                href="#"
+                href="/contact"
                 className="rounded-full bg-embassyGold px-8 py-4 text-center text-base font-bold text-white shadow-xl shadow-black/20 transition hover:-translate-y-1 hover:bg-brightGold hover:text-royal-950"
               >
                 Plan Your Visit
