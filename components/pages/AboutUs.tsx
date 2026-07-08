@@ -4,18 +4,18 @@ import Layout from "../Layout";
 
 const leaders = [
   {
-    name: "Pastor John Matthews",
+    name: "Pastor Bonginkosi Ndlela",
     role: "Lead Pastor",
     image:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85",
-    bio: "Pastor John leads with a heart for biblical teaching, discipleship, and community transformation.",
+      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1783493980/IMG_3192_z3t7qi.jpg",
+    bio: "Pastor Bonginkosi leads with a heart for biblical teaching, discipleship, and community transformation.",
   },
   {
-    name: "First Lady Mary Matthews",
+    name: "First Lady Nompumelelo Ndlela",
     role: "Women's Ministry Leader",
     image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=900&q=85",
-    bio: "First Lady Mary champions women, families, and practical faith through compassionate leadership.",
+      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1783494417/ChatGPT_Image_Jul_8_2026_09_05_10_AM_jfeznd.jpg",
+    bio: "First Lady Nompumelelo champions women, families, and practical faith through compassionate leadership.",
   },
 ];
 
@@ -26,8 +26,8 @@ export default function AboutUs() {
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
           <div className="overflow-hidden rounded-xl shadow-glow">
             <img
-              src="https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=1600&q=85"
-              alt="Church congregation gathered inside a sanctuary"
+              src="https://res.cloudinary.com/dae3qtnqt/image/upload/v1783451162/AboutUs_kr8h9o.jpg"
+              alt="Church congregation gathered around at official open and pastoral inauguration"
               className="h-[360px] w-full object-cover sm:h-[520px]"
             />
           </div>

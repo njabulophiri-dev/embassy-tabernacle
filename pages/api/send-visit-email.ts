@@ -1,7 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Resend } from "resend";
 
+type VisitEmailRequestBody = {
+  name?: string;
+  email?: string;
+  message?: string;
+};
+
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,19 +26,21 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, message } = req.body as {
-    name?: string;
-    email?: string;
-    message?: string;
-  };
+  const body = req.body as VisitEmailRequestBody;
+  const requiredFields = ["name", "email", "message"] as const;
 
-  const missing = ["name", "email", "message"].filter(
-    (field) => !req.body[field]?.toString().trim(),
+  const missing = requiredFields.filter(
+    (field) => !body[field]?.toString().trim(),
   );
 
   if (missing.length) {
     return res.status(400).json({ error: `Missing: ${missing.join(", ")}` });
   }
+
+  const { name, email, message } = body as Required<VisitEmailRequestBody>;
+  const escapedName = escapeHtml(name);
+  const escapedEmail = escapeHtml(email);
+  const escapedMessage = escapeHtml(message).replace(/\n/g, "<br />");
 
   try {
     const data = await resend.emails.send({
@@ -32,10 +49,10 @@ export default async function handler(
       subject: "New Plan Your Visit Request",
       html: `
         <h2>New visit request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Name:</strong> ${escapedName}</p>
+        <p><strong>Email:</strong> ${escapedEmail}</p>
         <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br />")}</p>
+        <p>${escapedMessage}</p>
       `,
     });
 
