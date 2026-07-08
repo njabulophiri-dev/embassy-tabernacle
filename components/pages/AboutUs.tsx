@@ -6,13 +6,15 @@ const leaders = [
   {
     name: "Pastor Bonginkosi Ndlela",
     role: "Lead Pastor",
-    image: "#",
+    image:
+      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1783493980/IMG_3192_z3t7qi.jpg",
     bio: "Pastor Bonginkosi leads with a heart for biblical teaching, discipleship, and community transformation.",
   },
   {
     name: "First Lady Nompumelelo Ndlela",
     role: "Women's Ministry Leader",
-    image: "#",
+    image:
+      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1783494417/ChatGPT_Image_Jul_8_2026_09_05_10_AM_jfeznd.jpg",
     bio: "First Lady Nompumelelo champions women, families, and practical faith through compassionate leadership.",
   },
 ];
