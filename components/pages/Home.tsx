@@ -24,7 +24,7 @@ import Layout, { socialLinks } from "../Layout";
 export default function Home() {
   return (
     <Layout>
-      <section className="relative isolate aspect-[4/5] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[21/9]">
+      <section className="relative isolate aspect-[4/5] min-h-[600px] w-full overflow-hidden sm:aspect-[16/9] sm:min-h-0 lg:aspect-[21/9]">
         <img
           src="https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=2200&q=85"
           alt="Church congregation worshipping with hands raised"
@@ -63,6 +63,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* or just add pb-8 to the last section wrapper, or margin on Layout's footer */}
       {/*<section className="bg-white px-4 py-10 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6">
           <div className="flex flex-wrap justify-center gap-4">
@@ -119,7 +120,6 @@ export default function Home() {
           </div>
         </div>
       </section>*/}
-
       {/* <section className="bg-slate-50 px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3">
           {stats.map(({ label, detail, Icon }) => {
