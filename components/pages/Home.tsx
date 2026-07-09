@@ -62,8 +62,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className="h-8 bg-white sm:h-0" />{" "}
-      {/* or just add pb-8 to the last section wrapper, or margin on Layout's footer */}
+
       {/*<section className="bg-white px-4 py-10 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6">
           <div className="flex flex-wrap justify-center gap-4">
