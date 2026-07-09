@@ -35,7 +35,7 @@ export default function Home() {
 
         <div className="relative flex h-full max-w-7xl flex-col justify-center mx-auto px-4 py-24 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <p className="mb-5 inline-flex rounded-full border border-brightGold/50 bg-white/10 px-4 py-2 text-sm font-bold uppercase tracking-[0.18em] text-brightGold backdrop-blur">
+            <p className="mb-5 mt-8 inline-flex rounded-full border border-brightGold/50 bg-white/10 px-4 py-2 text-sm font-bold uppercase tracking-[0.18em] text-brightGold backdrop-blur sm:mt-0">
               Sunday worship at 09:00 AM
             </p>
             <h1 className="font-serif text-5xl font-bold leading-tight tracking-normal text-white sm:text-6xl lg:text-7xl">
@@ -62,7 +62,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <div className="h-8 bg-white sm:h-0" />{" "}
       {/* or just add pb-8 to the last section wrapper, or margin on Layout's footer */}
       {/*<section className="bg-white px-4 py-10 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-6">
