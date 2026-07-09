@@ -24,16 +24,16 @@ import Layout, { socialLinks } from "../Layout";
 export default function Home() {
   return (
     <Layout>
-      <section className="relative isolate min-h-[calc(100vh-5rem)] overflow-hidden">
+      <section className="relative isolate aspect-[4/5] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[21/9]">
         <img
           src="https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=2200&q=85"
           alt="Church congregation worshipping with hands raised"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-royal-950/95 via-royal-950/70 to-royal-950/25" />
         <div className="absolute inset-0 bg-black/15" />
 
-        <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
+        <div className="relative flex h-full max-w-7xl flex-col justify-center mx-auto px-4 py-24 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p className="mb-5 inline-flex rounded-full border border-brightGold/50 bg-white/10 px-4 py-2 text-sm font-bold uppercase tracking-[0.18em] text-brightGold backdrop-blur">
               Sunday worship at 09:00 AM
