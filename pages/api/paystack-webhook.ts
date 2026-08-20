@@ -126,7 +126,9 @@ function verifySignature(rawBody: Buffer, signature: string) {
   return crypto.timingSafeEqual(expectedBuffer, actualBuffer);
 }
 
-function parseMetadata(metadata: PaystackWebhookEvent["data"]["metadata"]) {
+function parseMetadata(
+  metadata: NonNullable<PaystackWebhookEvent["data"]>["metadata"],
+) {
   if (!metadata) {
     return null;
   }
