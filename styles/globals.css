@@ -13,3 +13,17 @@ body {
 ::selection {
   @apply bg-brightGold text-royal-950;
 }
+
+@keyframes home-image-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.home-image-track {
+  animation: home-image-marquee linear infinite;
+}
+
+.home-hero {
+  container-type: size;
+}
