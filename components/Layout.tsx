@@ -73,6 +73,7 @@ export default function Layout({ children }: LayoutProps) {
                 src="/images/logo.jpg"
                 alt="Embassy Tabernacle Logo"
                 fill
+                sizes="44px"
                 className="object-cover"
               />
             </span>
@@ -157,6 +158,7 @@ export default function Layout({ children }: LayoutProps) {
                   src="/images/logo.jpg"
                   alt="Embassy Tabernacle Logo"
                   fill
+                  sizes="44px"
                   className="object-cover"
                 />
               </span>
@@ -265,7 +267,7 @@ export default function Layout({ children }: LayoutProps) {
           <p className="mt-1">
             Developed by{" "}
             <Link
-              href="https://zoryastudio.co.za"
+              href="https://zorya.co.za"
               className="font-semibold text-brightGold transition hover:text-white"
             >
               Zorya Studio
