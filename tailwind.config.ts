@@ -9,23 +9,23 @@ const config: Config = {
     extend: {
       colors: {
         royal: {
-          950: "#0f2b4d",
-          900: "#16365e",
-          800: "#1e3a5f"
+          950: "#06132B",
+          900: "#06132B",
+          800: "#06132B",
         },
-        embassyGold: "#d4af37",
-        brightGold: "#f5c518"
+        embassyGold: "#DEC378",
+        brightGold: "#DEC378",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
-        serif: ["var(--font-playfair)", "Playfair Display", "serif"]
+        serif: ["var(--font-playfair)", "Playfair Display", "serif"],
       },
       boxShadow: {
-        glow: "0 22px 70px rgba(15, 43, 77, 0.18)"
-      }
-    }
+        glow: "0 22px 70px rgba(6, 19, 43, 0.18)",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
 
 export default config;
