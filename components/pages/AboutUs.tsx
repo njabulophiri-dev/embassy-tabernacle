@@ -14,7 +14,7 @@ const leaders = [
     name: "First Lady Nompumelelo Ndlela",
     role: "Women's Ministry Leader",
     image:
-      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1783494417/ChatGPT_Image_Jul_8_2026_09_05_10_AM_jfeznd.jpg",
+      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1792489998/PHOTO-2026-10-20-11-46-25_fnmjou.jpg",
     bio: "First Lady Nompumelelo champions women, families and practical faith through compassionate leadership.",
   },
 ];
