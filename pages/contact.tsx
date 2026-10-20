@@ -54,7 +54,7 @@ export default function Contact() {
                 Let us help you.
               </h1>
               <p className="mt-4 max-w-2xl text-lg text-white/75 sm:text-xl">
-                Reach out to book a tour, ask about service times or get
+                Reach out to book a visit, ask about service times or get
                 directions to our church.
               </p>
             </div>
