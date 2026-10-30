@@ -11,6 +11,25 @@ type VisitEmailRequestBodyRequired = Required<VisitEmailRequestBody>;
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => {
+    switch (character) {
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#39;";
+      default:
+        return character;
+    }
+  });
+}
+
 function hasRequiredFields(
   body: VisitEmailRequestBody,
 ): body is VisitEmailRequestBodyRequired {
@@ -44,6 +63,9 @@ export default async function handler(
   }
 
   const { name, email, message } = body;
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeMessage = escapeHtml(message).replace(/\r?\n/g, "<br />");
 
   try {
     const data = await resend.emails.send({
@@ -52,10 +74,10 @@ export default async function handler(
       subject: "New Plan Your Visit Request",
       html: `
         <h2>New visit request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
         <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br />")}</p>
+        <p>${safeMessage}</p>
       `,
     });
 

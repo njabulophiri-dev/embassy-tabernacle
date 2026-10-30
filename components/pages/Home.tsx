@@ -44,9 +44,10 @@ const portraitImages = [
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState<boolean | null>(null);
   const images = isMobile ? portraitImages : landscapeImages;
   const slides = [...images, ...images];
+  const shouldPauseAnimation = isPaused ?? prefersReducedMotion;
 
   useEffect(() => {
     const mobileQuery = window.matchMedia("(max-width: 639px)");
@@ -76,8 +77,7 @@ export default function Home() {
           style={{
             width: "max-content",
             animationDuration: `${images.length * 6}s`,
-            animationPlayState:
-              isPaused || prefersReducedMotion ? "paused" : "running",
+            animationPlayState: shouldPauseAnimation ? "paused" : "running",
           }}
         >
           {slides.map((image, index) => (
@@ -105,14 +105,16 @@ export default function Home() {
         <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/60 via-black/25 to-black/10" />
 
         {images.length > 1 && (
-          <div className="absolute bottom-6 right-4 z-30 flex items-center gap-2 sm:bottom-8 sm:right-8">
+          <div className="absolute bottom-6 right-4 z-40 flex items-center gap-2 sm:bottom-8 sm:right-8">
             <button
               type="button"
-              onClick={() => setIsPaused((paused) => !paused)}
-              aria-label={isPaused ? "Play slideshow" : "Pause slideshow"}
+              onClick={() => setIsPaused(!shouldPauseAnimation)}
+              aria-label={
+                shouldPauseAnimation ? "Play slideshow" : "Pause slideshow"
+              }
               className="grid h-10 w-10 place-items-center rounded-full border border-white/50 bg-black/30 text-white backdrop-blur transition hover:bg-white hover:text-royal-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brightGold"
             >
-              {isPaused ? (
+              {shouldPauseAnimation ? (
                 <Play aria-hidden="true" className="h-4 w-4" />
               ) : (
                 <Pause aria-hidden="true" className="h-4 w-4" />

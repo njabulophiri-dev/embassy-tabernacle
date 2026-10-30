@@ -128,20 +128,25 @@ function verifySignature(rawBody: Buffer, signature: string) {
 
 function parseMetadata(
   metadata: NonNullable<PaystackWebhookEvent["data"]>["metadata"],
-) {
+): Record<string, unknown> | null {
   if (!metadata) {
     return null;
   }
 
-  if (typeof metadata === "object") {
-    return metadata;
+  if (typeof metadata === "string") {
+    try {
+      const parsed: unknown = JSON.parse(metadata);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+        ? (parsed as Record<string, unknown>)
+        : null;
+    } catch {
+      return null;
+    }
   }
 
-  try {
-    return JSON.parse(metadata);
-  } catch {
-    return null;
-  }
+  return Array.isArray(metadata)
+    ? null
+    : (metadata as Record<string, unknown>);
 }
 
 export default async function handler(
@@ -244,8 +249,20 @@ export default async function handler(
     /*
      * Validate currency.
      */
-    if (data.currency && data.currency.toUpperCase() !== "ZAR") {
+    if (data.currency?.toUpperCase() !== "ZAR") {
       console.warn("Ignoring non-ZAR transaction:", reference);
+
+      return res.status(200).json({
+        received: true,
+        processed: false,
+      });
+    }
+
+    if (
+      !Number.isSafeInteger(data.amount) ||
+      (data.amount ?? 0) <= 0
+    ) {
+      console.warn("Ignoring invalid transaction amount:", reference);
 
       return res.status(200).json({
         received: true,
@@ -259,7 +276,13 @@ export default async function handler(
      */
     const metadata = parseMetadata(data.metadata);
 
-    if (!metadata || metadata.purpose !== "church_giving") {
+    if (
+      !metadata ||
+      metadata.purpose !== "church_giving" ||
+      typeof metadata.amount_zar !== "number" ||
+      !Number.isSafeInteger(metadata.amount_zar) ||
+      metadata.amount_zar * 100 !== data.amount
+    ) {
       console.warn(
         "Ignoring webhook without church-giving metadata:",
         reference,
@@ -301,9 +324,7 @@ export default async function handler(
      */
     processedEvents.set(eventKey, Date.now());
 
-    const amount = typeof data.amount === "number" ? data.amount / 100 : null;
-
-    const donorEmail = data.customer?.email || metadata.donor_email || null;
+    const amount = data.amount / 100;
 
     /*
      * -------------------------------------------------------
@@ -320,7 +341,6 @@ export default async function handler(
       reference,
       amount,
       currency: data.currency,
-      donorEmail,
       frequency: metadata.frequency,
       planCode: metadata.plan_code || data.plan?.plan_code || null,
       paidAt: data.paid_at || null,

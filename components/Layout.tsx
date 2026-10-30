@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { siFacebook, siInstagram, siTiktok } from "simple-icons";
+import { siFacebook, siInstagram, siTiktok, siYoutube } from "simple-icons";
 
 import { Mail, Menu, Phone, X } from "lucide-react";
 
@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Giving", href: "/giving" },
+  { label: "Events", href: "/events" },
   { label: "Sermons", href: "/sermons" },
 ];
 
@@ -27,6 +28,11 @@ export const socialLinks = [
     label: "TikTok",
     href: "https://www.tiktok.com/@embassy_tabernacle",
     Icon: siTiktok,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@EmbassyTabernacles",
+    Icon: siYoutube,
   },
 ];
 
@@ -78,7 +84,7 @@ export default function Layout({ children }: LayoutProps) {
               />
             </span>
             <span className="truncate font-serif text-lg font-bold tracking-normal sm:text-xl">
-              Embassy Tabernacle Church
+              Embassy Tabernacle
             </span>
           </Link>
 
@@ -150,7 +156,7 @@ export default function Layout({ children }: LayoutProps) {
       <div className="pt-20">{children}</div>
 
       <footer className="bg-royal-950 text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
           <div>
             <Link href="/" className="flex items-center gap-3">
               <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-white/5">
@@ -163,7 +169,7 @@ export default function Layout({ children }: LayoutProps) {
                 />
               </span>
               <span className="font-serif text-xl font-bold">
-                Embassy Tabernacle Church
+                Embassy Tabernacle
               </span>
             </Link>
             <p className="mt-4 font-semibold text-brightGold">
@@ -179,20 +185,10 @@ export default function Layout({ children }: LayoutProps) {
           <div>
             <h2 className="font-serif text-xl font-bold">Quick Links</h2>
             <div className="mt-4 flex flex-col items-start gap-3">
-              {["Home", "About Us", "Giving", "Sermons"].map((label) => (
+              {navLinks.map(({ label, href }) => (
                 <Link
                   key={label}
-                  href={
-                    label === "Home"
-                      ? "/"
-                      : label === "About Us"
-                        ? "/about"
-                        : label === "Giving"
-                          ? "/giving"
-                          : label === "Sermons"
-                            ? "/sermons"
-                            : "#"
-                  }
+                  href={href}
                   className="text-sm text-white/70 transition hover:text-brightGold"
                 >
                   {label}
@@ -241,29 +237,49 @@ export default function Layout({ children }: LayoutProps) {
                 );
               })}
             </div>
-            <a
-              href={contactEmailHref}
-              onClick={handleEmailClick}
-              className="mt-5 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-brightGold"
-            >
-              <Mail className="h-4 w-4" />
-              {contactEmail}
-            </a>
-            <a
-              href="tel:+27606026095"
-              onClick={() => {
-                window.location.href = "tel:+27606026095";
-              }}
-              className="mt-2 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-brightGold"
-            >
-              <Phone className="h-4 w-4" />
-              +27 (60) 602 6095
-            </a>
+            <div className="mt-5 flex flex-col items-start gap-3">
+              <a
+                href={contactEmailHref}
+                onClick={handleEmailClick}
+                className="inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-brightGold"
+              >
+                <Mail className="h-4 w-4" />
+                {contactEmail}
+              </a>
+              <a
+                href="tel:+27606026095"
+                onClick={() => {
+                  window.location.href = "tel:+27606026095";
+                }}
+                className="inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-brightGold"
+              >
+                <Phone className="h-4 w-4" />
+                +27 (60) 602 6095
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="font-serif text-xl font-bold">Legal</h2>
+            <div className="mt-4 flex flex-col items-start gap-3">
+              <Link
+                href="/privacy"
+                className="text-sm text-white/70 transition hover:text-brightGold"
+              >
+                Privacy Notice
+              </Link>
+              <Link
+                href="/giving-help"
+                className="text-sm text-white/70 transition hover:text-brightGold"
+              >
+                Giving Information
+              </Link>
+            </div>
           </div>
         </div>
 
         <div className="border-t border-white/10 px-4 py-6 text-center text-sm text-white/60">
-          <p>© 2026 Embassy Tabernacle Church. All Rights Reserved.</p>
+          <p>© 2026 Embassy Tabernacle. All Rights Reserved.</p>
           <p className="mt-1">
             Developed by{" "}
             <Link

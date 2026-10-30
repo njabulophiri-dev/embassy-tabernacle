@@ -73,20 +73,25 @@ function isRateLimited(ip: string) {
   return current.count > RATE_LIMIT_MAX;
 }
 
-function parseMetadata(metadata: PaystackMetadata) {
+function parseMetadata(metadata: PaystackMetadata): Record<string, unknown> | null {
   if (!metadata) {
     return null;
   }
 
-  if (typeof metadata === "object") {
-    return metadata;
+  if (typeof metadata === "string") {
+    try {
+      const parsed: unknown = JSON.parse(metadata);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+        ? (parsed as Record<string, unknown>)
+        : null;
+    } catch {
+      return null;
+    }
   }
 
-  try {
-    return JSON.parse(metadata);
-  } catch {
-    return null;
-  }
+  return Array.isArray(metadata)
+    ? null
+    : (metadata as Record<string, unknown>);
 }
 
 export default async function handler(
@@ -169,6 +174,13 @@ export default async function handler(
       });
     }
 
+    if (transaction.reference !== reference) {
+      return res.status(400).json({
+        success: false,
+        message: "The transaction reference could not be verified.",
+      });
+    }
+
     /*
      * NEVER treat the callback itself as success.
      */
@@ -184,7 +196,7 @@ export default async function handler(
     /*
      * Make sure we're dealing with ZAR.
      */
-    if (transaction.currency.toUpperCase() !== "ZAR") {
+    if (transaction.currency?.toUpperCase() !== "ZAR") {
       console.error("Unexpected transaction currency:", transaction.currency);
 
       return res.status(400).json({
@@ -199,7 +211,13 @@ export default async function handler(
      */
     const metadata = parseMetadata(transaction.metadata);
 
-    if (!metadata || metadata.purpose !== "church_giving") {
+    if (
+      !metadata ||
+      metadata.purpose !== "church_giving" ||
+      typeof metadata.amount_zar !== "number" ||
+      !Number.isSafeInteger(metadata.amount_zar) ||
+      metadata.amount_zar * 100 !== transaction.amount
+    ) {
       console.error(
         "Transaction failed giving metadata validation:",
         transaction.reference,
@@ -214,7 +232,11 @@ export default async function handler(
 
     const amount = transaction.amount / 100;
 
-    if (!Number.isFinite(amount) || amount <= 0) {
+    if (
+      !Number.isSafeInteger(transaction.amount) ||
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ) {
       return res.status(400).json({
         success: false,
         message: "The transaction amount could not be verified.",
