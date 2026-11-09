@@ -26,7 +26,7 @@ export const socialLinks = [
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@embassy_tabernacle",
+    href: "https://www.tiktok.com/@embassytabernacle",
     Icon: siTiktok,
   },
   {

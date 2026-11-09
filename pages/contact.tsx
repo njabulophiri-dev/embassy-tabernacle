@@ -146,6 +146,16 @@ export default function Contact() {
                       {feedback}
                     </p>
                   ) : null}
+                  <p className="text-xs text-white/60">
+                    By submitting this form you agree to our{" "}
+                    <a
+                      href="http://localhost:3000/privacy"
+                      className="text-brightGold underline transition hover:text-white"
+                    >
+                      Privacy Policy
+                    </a>
+                    . We don't share your details with third parties.
+                  </p>
                 </form>
               </section>
 
