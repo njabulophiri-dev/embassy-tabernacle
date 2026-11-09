@@ -7,7 +7,7 @@ const leaders = [
     name: "Pastor Bonginkosi Ndlela",
     role: "Lead Pastor",
     image:
-      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1783493980/IMG_3192_z3t7qi.jpg",
+      "https://res.cloudinary.com/dae3qtnqt/image/upload/v1793346379/PHOTO-2026-10-25-08-39-18_qyumzk.jpg",
     bio: "Pastor Bonginkosi leads with a heart for biblical teaching, discipleship and community transformation.",
   },
   {

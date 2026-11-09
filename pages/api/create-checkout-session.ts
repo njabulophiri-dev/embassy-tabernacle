@@ -114,7 +114,20 @@ function getBaseUrl(req: NextApiRequest): string {
   const configuredUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   if (configuredUrl) {
-    return configuredUrl.replace(/\/$/, "");
+    const baseUrl = new URL(configuredUrl);
+
+    if (
+      baseUrl.username ||
+      baseUrl.password ||
+      baseUrl.search ||
+      baseUrl.hash ||
+      (process.env.NODE_ENV === "production" &&
+        baseUrl.protocol !== "https:")
+    ) {
+      throw new Error("NEXT_PUBLIC_BASE_URL must be a valid HTTPS site URL.");
+    }
+
+    return baseUrl.toString().replace(/\/$/, "");
   }
 
   if (process.env.NODE_ENV === "development") {
@@ -155,6 +168,23 @@ async function paystackRequest<T>(
   }
 
   return data as T;
+}
+
+function isPaystackCheckoutUrl(value: string | undefined): value is string {
+  if (!value) {
+    return false;
+  }
+
+  try {
+    const checkoutUrl = new URL(value);
+    return (
+      checkoutUrl.protocol === "https:" &&
+      (checkoutUrl.hostname === "paystack.com" ||
+        checkoutUrl.hostname.endsWith(".paystack.com"))
+    );
+  } catch {
+    return false;
+  }
 }
 
 export default async function handler(
@@ -248,26 +278,13 @@ export default async function handler(
             callback_url: callbackUrl,
 
             metadata: JSON.stringify(metadata),
-
-            channels: [
-              "card",
-              "bank",
-              "apple_pay",
-              "ussd",
-              "qr",
-              "mobile_money",
-              "bank_transfer",
-              "eft",
-              "capitec_pay",
-              "payattitude",
-            ],
           }),
         },
       );
 
       const authorizationUrl = paystack.data?.authorization_url;
 
-      if (!authorizationUrl) {
+      if (!isPaystackCheckoutUrl(authorizationUrl)) {
         throw new Error("Paystack did not return an authorization URL.");
       }
 
@@ -357,7 +374,7 @@ export default async function handler(
 
     const authorizationUrl = paystack.data?.authorization_url;
 
-    if (!authorizationUrl) {
+    if (!isPaystackCheckoutUrl(authorizationUrl)) {
       throw new Error("Paystack did not return an authorization URL.");
     }
 

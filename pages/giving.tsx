@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -29,7 +30,7 @@ type VerificationResult = {
 };
 
 const MIN_AMOUNT = 1;
-const MAX_AMOUNT = 1_000_000;
+const MAX_AMOUNT = 100_000;
 
 const formatCurrency = (value: number) =>
   `R${value.toLocaleString("en-ZA", {
@@ -105,9 +106,15 @@ export default function Giving() {
         }
 
         const transactionStatus = body.data?.status || body.status;
-
+        const amountInSubunit = body.data?.amount ?? body.amount;
         const paymentSucceeded =
-          body.success === true || transactionStatus === "success";
+          body.success === true &&
+          transactionStatus === "success" &&
+          body.data?.reference === referenceToVerify &&
+          body.data.currency === "ZAR" &&
+          typeof amountInSubunit === "number" &&
+          Number.isSafeInteger(amountInSubunit) &&
+          amountInSubunit > 0;
 
         if (!paymentSucceeded) {
           if (!cancelled) {
@@ -123,12 +130,7 @@ export default function Giving() {
 
         if (!cancelled) {
           setPaymentState("success");
-
-          const amountInSubunit = body.data?.amount ?? body.amount;
-
-          if (typeof amountInSubunit === "number" && amountInSubunit > 0) {
-            setVerifiedAmount(amountInSubunit / 100);
-          }
+          setVerifiedAmount(amountInSubunit / 100);
         }
       } catch (err) {
         if (!cancelled) {
@@ -231,6 +233,7 @@ export default function Giving() {
     setError(null);
     setCheckoutUrl(null);
     setPaymentState("idle");
+    const checkoutWindow = window.open("about:blank", "_blank");
 
     try {
       const response = await fetch("/api/create-checkout-session", {
@@ -256,14 +259,32 @@ export default function Giving() {
         );
       }
 
-      if (!body.url) {
+      let paystackUrl: URL;
+
+      try {
+        paystackUrl = new URL(body.url);
+      } catch {
+        throw new Error("Paystack did not return a valid checkout URL.");
+      }
+
+      if (
+        paystackUrl.protocol !== "https:" ||
+        (paystackUrl.hostname !== "paystack.com" &&
+          !paystackUrl.hostname.endsWith(".paystack.com"))
+      ) {
         throw new Error("Paystack did not return a checkout URL.");
       }
 
-      setCheckoutUrl(body.url);
+      setCheckoutUrl(paystackUrl.toString());
 
-      window.open(body.url, "_blank", "noopener,noreferrer");
+      if (checkoutWindow) {
+        checkoutWindow.opener = null;
+        checkoutWindow.location.href = paystackUrl.toString();
+      } else {
+        window.location.assign(paystackUrl.toString());
+      }
     } catch (err) {
+      checkoutWindow?.close();
       console.error("Checkout error:", err);
 
       setError(err instanceof Error ? err.message : "Unable to start payment.");
@@ -471,17 +492,6 @@ export default function Giving() {
                 <p className="mt-4 text-lg text-white/75 sm:text-xl">
                   One-time gifts, automated monthly giving and fast, secure
                   mobile payments.
-                </p>
-              </div>
-
-              <div className="mt-6 rounded-3xl bg-white/5 p-6 text-white/80 sm:mt-0">
-                <p className="text-sm uppercase tracking-[0.25em] text-brightGold">
-                  Paystack powered
-                </p>
-
-                <p className="mt-3 leading-7">
-                  Secure checkout powered by Paystack with supported payment
-                  methods available at checkout.
                 </p>
               </div>
             </div>
@@ -709,8 +719,8 @@ export default function Giving() {
 
                 {/* SECURITY */}
                 <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-                  <p className="text-sm font-semibold text-white">
-                    Secure giving
+                  <p className="text-sm uppercase tracking-[0.25em] text-brightGold">
+                    Paystack powered
                   </p>
 
                   <p className="mt-2 text-sm leading-6 text-white/60">
@@ -720,6 +730,13 @@ export default function Giving() {
                 </div>
               </aside>
             </div>
+
+            <Link
+              href="/giving-help"
+              className="mt-8 inline-flex rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:border-brightGold hover:text-brightGold"
+            >
+              Giving and payment help
+            </Link>
           </div>
         </div>
       </main>
