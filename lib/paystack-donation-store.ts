@@ -36,28 +36,16 @@ export async function savePaystackDonation(
   donation: PaystackDonationRecord,
 ): Promise<"stored" | "duplicate"> {
   const key = `paystack:donation:${donation.reference}`;
-  const result = await redis.set(key, JSON.stringify(donation), { nx: true });
+  const result = await redis.set(key, donation, { nx: true });
 
   if (result === "OK") {
     return "stored";
   }
 
-  const existingValue = await redis.get<string>(key);
-
-  if (typeof existingValue !== "string") {
-    throw new Error("Existing Paystack donation record could not be read.");
-  }
-
-  let existing: unknown;
-
-  try {
-    existing = JSON.parse(existingValue);
-  } catch {
-    throw new Error("Existing Paystack donation record is invalid.");
-  }
+  const existing = await redis.get<unknown>(key);
 
   if (!isDonationRecord(existing)) {
-    throw new Error("Existing Paystack donation record is invalid.");
+    throw new Error("Existing Paystack donation record could not be read.");
   }
 
   if (
