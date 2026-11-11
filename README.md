@@ -19,9 +19,9 @@ The Giving page uses Paystack for one-time and monthly ZAR donations. Contact fo
 ## Paystack Setup
 
 1. Create a Paystack merchant account, complete its verification, enable ZAR payments, and configure the account's settlement bank details.
-2. Copy `.env.example` to `.env.local` for local testing. Set `NEXT_PUBLIC_BASE_URL` to the site's absolute URL and `PAYSTACK_SECRET_KEY` to a Paystack **test** secret key. Keep secret keys server-side; never put them in a `NEXT_PUBLIC_` variable, commit them, or share them in chat.
+2. Copy `.env.example` to `.env.local` for local testing. Set `NEXT_PUBLIC_BASE_URL` to the site's absolute URL, `PAYSTACK_SECRET_KEY` to a Paystack **test** secret key, and `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` for durable donation records. Keep secret keys server-side; never put them in a `NEXT_PUBLIC_` variable, commit them, or share them in chat.
 3. Run the site and complete a test donation using Paystack test payment details. The return URL is generated as `${NEXT_PUBLIC_BASE_URL}/giving`.
-4. Before accepting real donations, deploy the site on HTTPS, set `NEXT_PUBLIC_BASE_URL` to the exact production origin, and configure `PAYSTACK_SECRET_KEY` in the hosting provider's encrypted environment settings using the live secret key from Paystack.
+4. Before accepting real donations, deploy the site on HTTPS, set `NEXT_PUBLIC_BASE_URL` to the exact production origin, and configure `PAYSTACK_SECRET_KEY` in the hosting provider's encrypted environment settings using the live secret key from Paystack. Configure Upstash Redis's production REST URL and token as encrypted server-side variables too. Verified donations are stored in Redis without an expiry and webhook retries are idempotent by transaction reference. Keep Redis persistence/backups enabled and reconcile its records with the Paystack dashboard.
 5. In the Paystack dashboard, register `https://your-domain.example/api/paystack-webhook` as the webhook URL and enable the `charge.success` event. The endpoint validates Paystack's signature and the transaction before acknowledging it.
 6. Redeploy after setting production variables. Make a small live donation and confirm it appears in the Paystack dashboard and settles to the church's configured account.
 

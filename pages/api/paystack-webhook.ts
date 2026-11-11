@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import crypto from "crypto";
+import { savePaystackDonation } from "../../lib/paystack-donation-store";
 
 export const config = {
   api: {
@@ -45,33 +46,6 @@ type PaystackWebhookEvent = {
     };
   };
 };
-
-/*
- * In-process duplicate protection.
- *
- * We use Paystack's transaction ID when available and
- * fall back to the transaction reference.
- *
- * IMPORTANT:
- * This is NOT durable across server restarts or multiple
- * serverless instances.
- *
- * For production money processing, persist processed
- * event/reference IDs in a database or Redis.
- */
-const processedEvents = new Map<string, number>();
-
-const EVENT_TTL = 24 * 60 * 60 * 1000;
-
-function cleanupProcessedEvents() {
-  const now = Date.now();
-
-  for (const [key, timestamp] of processedEvents.entries()) {
-    if (now - timestamp > EVENT_TTL) {
-      processedEvents.delete(key);
-    }
-  }
-}
 
 function getRawBody(req: NextApiRequest): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -249,7 +223,10 @@ export default async function handler(
     /*
      * Validate currency.
      */
-    if (data.currency?.toUpperCase() !== "ZAR") {
+    if (
+      typeof data.currency !== "string" ||
+      data.currency.toUpperCase() !== "ZAR"
+    ) {
       console.warn("Ignoring non-ZAR transaction:", reference);
 
       return res.status(200).json({
@@ -259,8 +236,9 @@ export default async function handler(
     }
 
     if (
+      typeof data.amount !== "number" ||
       !Number.isSafeInteger(data.amount) ||
-      (data.amount ?? 0) <= 0
+      data.amount <= 0
     ) {
       console.warn("Ignoring invalid transaction amount:", reference);
 
@@ -294,23 +272,23 @@ export default async function handler(
       });
     }
 
-    cleanupProcessedEvents();
+    const result = await savePaystackDonation({
+      reference,
+      transactionId: data.id ?? null,
+      amountMinor: data.amount,
+      currency: data.currency,
+      frequency:
+        typeof metadata.frequency === "string" ? metadata.frequency : null,
+      planCode:
+        (typeof metadata.plan_code === "string" && metadata.plan_code) ||
+        data.plan?.plan_code ||
+        null,
+      paidAt: data.paid_at || null,
+      recordedAt: new Date().toISOString(),
+    });
 
-    /*
-     * Build a stable idempotency key.
-     *
-     * Paystack transaction IDs are preferable because
-     * they identify the transaction itself.
-     */
-    const eventKey = data.id
-      ? `charge.success:${data.id}`
-      : `charge.success:${reference}`;
-
-    /*
-     * Duplicate event?
-     */
-    if (processedEvents.has(eventKey)) {
-      console.log(`Duplicate Paystack webhook ignored: ${eventKey}`);
+    if (result === "duplicate") {
+      console.log(`Duplicate Paystack webhook ignored: ${reference}`);
 
       return res.status(200).json({
         received: true,
@@ -319,42 +297,7 @@ export default async function handler(
       });
     }
 
-    /*
-     * Mark it before processing.
-     */
-    processedEvents.set(eventKey, Date.now());
-
-    const amount = data.amount / 100;
-
-    /*
-     * -------------------------------------------------------
-     * THIS IS WHERE YOUR REAL PAYMENT PROCESSING GOES.
-     * -------------------------------------------------------
-     *
-     * For now we log the verified transaction.
-     *
-     * Later this should create/update a persistent
-     * donation record in your database.
-     */
-    console.log("Verified Embassy Tabernacle payment:", {
-      event: eventName,
-      reference,
-      amount,
-      currency: data.currency,
-      frequency: metadata.frequency,
-      planCode: metadata.plan_code || data.plan?.plan_code || null,
-      paidAt: data.paid_at || null,
-    });
-
-    /*
-     * IMPORTANT:
-     *
-     * Do not send sensitive card/authorization information
-     * to your logs or email.
-     *
-     * If we later add donor email notifications, we should
-     * process them from a durable donation record.
-     */
+    console.log("Verified Embassy Tabernacle payment recorded:", reference);
 
     return res.status(200).json({
       received: true,
